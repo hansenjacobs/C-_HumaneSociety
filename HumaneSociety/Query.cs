@@ -70,9 +70,10 @@ namespace HumaneSociety
             catch
             {
                 return null;
-            }
-            
+            }   
         }
+
+        // Jake left off starting public static IEnumberable GetUserAdoptionStatus();
 
         public static Employee RunEmployeeQueries(Employee employee, string queryType)
         {
