@@ -135,7 +135,6 @@ namespace HumaneSociety
             DisplayUserOptions(info);
             Console.ReadLine();
         }
-        }
 
         public static void DisplayAnimalInfo(Animal animal)
         {
