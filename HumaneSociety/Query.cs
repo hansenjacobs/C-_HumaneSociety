@@ -106,6 +106,22 @@ namespace HumaneSociety
             }   
         }
 
+        public static Animal GetAnimalByID(int iD)
+        {
+            try
+            {
+                using(HumanSocietyDataContext db = new HumanSocietyDataContext())
+                {
+                    var animalResult = db.Animals.Where(a => a.ID == iD).FirstOrDefault();
+                    return animalResult;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static IEnumerable<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
         {
             try
