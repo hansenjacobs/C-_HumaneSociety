@@ -116,6 +116,14 @@ namespace HumaneSociety
             }
         }
 
+        public static Employee EmployeeLogin(string username, string password)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                return db.Employees.Where(e => e.userName == username && e.pass == password).First();
+            }
+        }
+
         public static Client GetClient(string userName, string password)
         {
             try
