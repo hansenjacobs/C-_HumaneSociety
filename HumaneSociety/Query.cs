@@ -265,6 +265,16 @@ namespace HumaneSociety
             }
         }
 
+        public static void UpdateEmail(Client client)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                Client clientResult = db.Clients.Where(c => c.ID == client.ID).First();
+                clientResult.email = client.email;
+                db.SubmitChanges();
+            }
+        }
+
         private static Employee UpdateEmployee(Employee employee)
         {
             try
