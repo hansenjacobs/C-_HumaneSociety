@@ -147,6 +147,28 @@ namespace HumaneSociety
             }
         }
 
+        public static int GetDiet()
+        {
+            string food = UserInterface.GetStringData("food type", "the animal's");
+            int amount = UserInterface.GetIntegerData($"{food} for this animal", "the serving amount of");
+
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var dietPlan = db.DietPlans.Where(d => d.food == food && d.amount == amount).FirstOrDefault();
+                if(dietPlan == null)
+                {
+                    dietPlan = new DietPlan();
+                    dietPlan.food = food;
+                    dietPlan.amount = amount;
+
+                    db.DietPlans.InsertOnSubmit(dietPlan);
+                    dietPlan = db.DietPlans.Where(d => d.food == food && d.amount == amount).FirstOrDefault();
+                }
+
+                return dietPlan.ID;
+            }
+        }
+
         private static Employee GetEmployee(Employee employee)
         {
             try
