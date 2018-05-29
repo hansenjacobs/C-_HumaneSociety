@@ -17,6 +17,30 @@ namespace HumaneSociety
             MyTable.SubmitChanges();
         }
 
+        public static void AddNewClient(string nameF, string nameL, string username, string password, string email, string streetAdress, int zipCode, int state)
+        {
+            var client = new Client();
+            client.firstName = nameF;
+            client.lastName = nameL;
+            client.userName = username;
+            client.pass = password;
+            client.email = email;
+
+            var userAddress = new UserAddress();
+            userAddress.addessLine1 = streetAdress;
+            userAddress.USState = GetStateByID(state);
+            userAddress.zipcode = zipCode;
+
+            client.UserAddress1 = userAddress;
+
+            using(var db = new HumaneSocietyDataContext())
+            {
+                db.Clients.InsertOnSubmit(client);
+            }
+
+            
+        }
+
         public static void Adopt(Animal animal, Client client)
         {
             var clientAnimalJunction = new ClientAnimalJunction();
@@ -136,6 +160,22 @@ namespace HumaneSociety
                 return null;
             }
         }
+
+        public static USState GetStateByID(int iD)
+        {
+            try
+            {
+                using (var db = new HumaneSocietyDataContext)
+                {
+                    return db.USStates.Where(s => s.ID == iD).FirstOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
 
         public static IQueryable<USState> GetStates()
         {
