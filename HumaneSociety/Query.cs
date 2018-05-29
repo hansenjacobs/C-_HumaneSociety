@@ -52,7 +52,7 @@ namespace HumaneSociety
             }
         }
 
-        public static void AddUsernamePassword(Employee employee)
+        public static void AddUsernameAndPassword(Employee employee)
         {
             using (var db = new HumaneSocietyDataContext())
             {
