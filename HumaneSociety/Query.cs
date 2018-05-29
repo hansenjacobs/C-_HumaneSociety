@@ -67,13 +67,27 @@ namespace HumaneSociety
                     }
                 }   
             }
-            catch
+            catch (Exception)
             {
                 return null;
             }   
         }
 
-        // Jake left off starting public static IEnumberable GetUserAdoptionStatus();
+        public static IEnumerable<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
+        {
+            try
+            {
+                using (HumaneSocietyDataContext db = new HumaneSocietyDataContext())
+                {
+                    var clientAnimalResult = db.ClientAnimalJunctions.Where(c => c.Client1.ID == client.ID);
+                    return clientAnimalResult;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         public static Employee RunEmployeeQueries(Employee employee, string queryType)
         {
