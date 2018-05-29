@@ -84,22 +84,37 @@ namespace HumaneSociety
             MyTable.SubmitChanges();
         }
 
-        public static int BreedSearch(string inputBreed, HumaneSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
+        public static int? BreedSearch(string inputBreed, HumaneSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
         {
-            var existingBreed = (from row in MyTable.Breeds where row.breed1 == inputBreed select row.ID).FirstOrDefault();
+            int? existingBreed = (from row in MyTable.Breeds where row.breed1 == inputBreed select row.ID).FirstOrDefault();
             return existingBreed;
         }
 
-        //public static int GetBreed(string inputBreed)
-        //{
-        //    HumanSocietyDataContext MyTable = new HumanSocietyDataContext();
-        //    int testBreed = BreedSearch(inputBreed, MyTable)
+        public static int GetBreed(string inputBreed)
+        {
+            HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
+            int existingBreed;
+            int? testBreed = BreedSearch(inputBreed, MyTable);
+            if (testBreed == null)
+            {
+                AddBreed(inputBreed);
+                existingBreed = (int)testBreed;
+                return existingBreed;
+            }
+            else {
+                existingBreed = (int)testBreed;
+                return existingBreed;
+            }
+        }
 
-
-
-        //    if BreedSearch() returns null, call AddBreed() and then return that breed ID;
-            
-        //}
+        public static void AddBreed(string inputBreed)
+        {
+            HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
+            var newBreed = new Breed();
+            newBreed.breed1 = inputBreed;
+            MyTable.Breeds.InsertOnSubmit(newBreed);
+            MyTable.SubmitChanges();
+        }
 
         public static bool CheckEmployeeUserNameExist(string username)
         {
@@ -138,6 +153,108 @@ namespace HumaneSociety
             using (var db = new HumaneSocietyDataContext())
             {
                 return db.Employees.Where(e => e.userName == username && e.pass == password).First();
+            }
+        }
+
+        public static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
+        {
+            bool breedUpdated = false;
+
+            using (var db = new HumaneSocietyDataContext())
+            {
+                foreach (KeyValuePair<int, string> update in updates)
+                {
+                    switch (update.Key)
+                    {
+                        case 1:
+                        case 2:
+                            if (!breedUpdated)
+                            {
+                                int? categoryInt;
+                                int? breedInt;
+
+                                if (updates.ContainsKey(1))
+                                {
+                                    categoryInt = db.Catagories.Where(c => c.catagory1 == updates[1]).Select(c => c.ID).FirstOrDefault();
+                                }
+                                else
+                                {
+                                    categoryInt = animal.Breed1.catagory;
+                                }
+
+                                if (categoryInt == null)
+                                {
+                                    var category = new Catagory();
+                                    category.catagory1 = updates[1];
+                                    db.Catagories.InsertOnSubmit(category);
+                                    db.SubmitChanges();
+                                    categoryInt = db.Catagories.Where(c => c.catagory1 == updates[1]).Select(c => c.ID).FirstOrDefault();
+                                }
+
+                                if (updates.ContainsKey(2))
+                                {
+                                    breedInt = db.Breeds.Where(b => b.catagory == categoryInt && b.breed1 == updates[2]).Select(b => b.ID).FirstOrDefault();
+                                }
+                                else
+                                {
+                                    breedInt = db.Breeds.Where(b => b.breed1 == animal.Breed1.breed1 && b.catagory == categoryInt).Select(b => b.ID).FirstOrDefault();
+                                }
+
+                                if (breedInt == null)
+                                {
+                                    var breed = new Breed();
+                                    breed.catagory = categoryInt;
+                                    breed.breed1 = updates[2];
+                                    db.Breeds.InsertOnSubmit(breed);
+                                    db.SubmitChanges();
+                                    breedInt = db.Breeds.Where(b => b.catagory == categoryInt && b.breed1 == updates[2]).Select(b => b.ID).FirstOrDefault();
+                                }
+
+                                animal.breed = breedInt;
+                                breedUpdated = true;
+                            }
+                            break;
+
+                        case 3:
+                            animal.name = update.Value;
+                            break;
+
+                        case 4:
+                            animal.age = Int32.Parse(update.Value);
+                            break;
+
+                        case 5:
+                            animal.demeanor = update.Value;
+                            break;
+
+                        case 6:
+                            animal.kidFriendly = bool.Parse(update.Value);
+                            break;
+
+                        case 7:
+                            animal.petFriendly = bool.Parse(update.Value);
+                            break;
+
+                        case 8:
+                            animal.weight = Int32.Parse(update.Value);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                }
+
+                var animalResult = db.Animals.Where(a => a.ID == animal.ID).FirstOrDefault();
+                animalResult.Breed1 = animal.Breed1;
+                animalResult.name = animal.name;
+                animalResult.age = animal.age;
+                animalResult.demeanor = animal.demeanor;
+                animalResult.kidFriendly = animal.kidFriendly;
+                animalResult.petFriendly = animal.petFriendly;
+                animalResult.weight = animal.weight;
+
+                db.SubmitChanges();
             }
         }
 
