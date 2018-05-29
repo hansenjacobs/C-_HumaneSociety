@@ -264,6 +264,16 @@ namespace HumaneSociety
             }
         }
 
+        public static void UpdateAdoption (bool decision, ClientAnimalJunction clientAnimalJunction)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var clientAnimalJunctionResult = db.ClientAnimalJunctions.Where(c => c.Client1.ID == clientAnimalJunction.Client1.ID && c.Animal1.ID == clientAnimalJunction.Animal1.ID).FirstOrDefault();
+                clientAnimalJunctionResult.approvalStatus = decision ? "approved" : "denied";
+                db.SubmitChanges();
+            }
+        }
+
         public static void updateClient(Client client)
         {
             using (var db = new HumaneSocietyDataContext())
