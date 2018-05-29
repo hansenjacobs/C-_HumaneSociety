@@ -36,9 +36,7 @@ namespace HumaneSociety
             using(var db = new HumaneSocietyDataContext())
             {
                 db.Clients.InsertOnSubmit(client);
-            }
-
-            
+            } 
         }
 
         public static void Adopt(Animal animal, Client client)
@@ -246,6 +244,25 @@ namespace HumaneSociety
             }
 
             return queryMethod(employee);
+        }
+
+        public static void updateClient(Client client)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var clientResult = db.Clients.Where(c => c.ID == client.ID).FirstOrDefault();
+                clientResult.firstName = client.firstName;
+                clientResult.lastName = client.lastName;
+                clientResult.email = client.email;
+                clientResult.homeSize = client.homeSize;
+                clientResult.income = client.income;
+                clientResult.kids = client.kids;
+                clientResult.pass = client.pass;
+                clientResult.userAddress = client.userAddress;
+                clientResult.userName = client.userName;
+
+                db.SubmitChanges();
+            }
         }
 
         private static Employee UpdateEmployee(Employee employee)
