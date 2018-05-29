@@ -163,7 +163,7 @@ namespace HumaneSociety
         {
             try
             {
-                using (var db = new HumaneSocietyDataContext)
+                using (var db = new HumaneSocietyDataContext())
                 {
                     return db.USStates.Where(s => s.ID == iD).FirstOrDefault();
                 }
