@@ -162,6 +162,7 @@ namespace HumaneSociety
                     dietPlan.amount = amount;
 
                     db.DietPlans.InsertOnSubmit(dietPlan);
+                    db.SubmitChanges();
                     dietPlan = db.DietPlans.Where(d => d.food == food && d.amount == amount).FirstOrDefault();
                 }
 
@@ -191,6 +192,29 @@ namespace HumaneSociety
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public static int GetLocation()
+        {
+            string building = UserInterface.GetStringData("building", "the animal's");
+            string room = UserInterface.GetStringData("room", "the animal's");
+
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var location = db.Rooms.Where(r => r.building == building && r.name == room).FirstOrDefault();
+                if (location == null)
+                {
+                    location = new Room();
+                    location.building = building;
+                    location.name = room;
+
+                    db.Rooms.InsertOnSubmit(location);
+                    db.SubmitChanges();
+                    location = db.Rooms.Where(r => r.building == building && r.name == room).FirstOrDefault();
+                }
+
+                return location.ID;
             }
         }
 
