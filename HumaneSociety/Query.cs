@@ -167,6 +167,14 @@ namespace HumaneSociety
             }
         }
 
+        public static IQueryable<AnimalShotJunction> GetShots(Animal animal)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                return db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID);
+            }
+        }
+
         public static USState GetStateByID(int iD)
         {
             try
