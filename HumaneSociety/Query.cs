@@ -374,7 +374,7 @@ namespace HumaneSociety
             }
         }
 
-        public static IQueryable<ClientAnimalJunction> GetPendingAdoptions()
+        public static IEnumerable<ClientAnimalJunction> GetPendingAdoptions()
         {
             using (var db = new HumaneSocietyDataContext())
             {
@@ -382,13 +382,18 @@ namespace HumaneSociety
             }
         }
 
-        public static IQueryable<AnimalShotJunction> GetShots(Animal animal)
+        public static IEnumerable<AnimalShotJunction> GetShots(Animal animal)
         {
-            using (var db = new HumaneSocietyDataContext())
-            {
-                var results = db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID);
-                return results;
-            }
+            IEnumerable<AnimalShotJunction> results;
+            var db = new HumaneSocietyDataContext();
+            results = db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID).ToList();
+            return results;
+            //using (var db = new HumaneSocietyDataContext())
+            //{
+            //    db.DeferredLoadingEnabled = false;
+            //    results = db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID).ToList();
+            //}
+            //return results;
         }
 
         public static USState GetStateByID(int iD)
@@ -603,8 +608,8 @@ namespace HumaneSociety
                 if(animalShotJunction == null)
                 {
                     animalShotJunction = new AnimalShotJunction();
-                    animalShotJunction.Animal = animal;
-                    animalShotJunction.Shot = shot;
+                    animalShotJunction.Animal_ID = animal.ID;
+                    animalShotJunction.Shot_ID = shot.ID;
                     animalShotJunction.dateRecieved = DateTime.Now;
                     db.AnimalShotJunctions.InsertOnSubmit(animalShotJunction);
                 }

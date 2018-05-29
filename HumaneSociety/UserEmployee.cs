@@ -158,8 +158,8 @@ namespace HumaneSociety
         private void CheckShots(Animal animal)
         {
             List<string> shotInfo = new List<string>();
-            var shots = Query.GetShots(animal);
-            foreach(AnimalShotJunction shot in shots.ToList())
+            List<AnimalShotJunction> shots = Query.GetShots(animal).ToList();
+            foreach(AnimalShotJunction shot in shots)
             {
                 shotInfo.Add($"{shot.Shot.name} Date: {shot.dateRecieved}");
             }
