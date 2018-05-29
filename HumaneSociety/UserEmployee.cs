@@ -184,17 +184,23 @@ namespace HumaneSociety
         private void UpdateAnimal(Animal animal)
         {
             Dictionary<int, string> updates = new Dictionary<int, string>();
-            List<string> options = new List<string>() { "Select Updates: (Enter number and choose finished when finished)", "1. Category", "2. Breed", "3. Name", "4. Age", "5. Demeanor", "6. Kid friendly", "7. Pet friendly", "8. Weight", "9. Finished" };
-            UserInterface.DisplayUserOptions(options);
-            string input = UserInterface.GetUserInput();
-            if(input.ToLower() == "9" ||input.ToLower() == "finished")
+            bool collectingInfo = true;
+            do
             {
-                Query.EnterUpdate(animal, updates);
-            }
-            else
-            {
-                updates = UserInterface.EnterSearchCriteria(updates, input);
-            }
+                List<string> options = new List<string>() { "Select Updates: (Enter number and choose finished when finished)", "1. Category", "2. Breed", "3. Name", "4. Age", "5. Demeanor", "6. Kid friendly", "7. Pet friendly", "8. Weight", "9. Finished" };
+                UserInterface.DisplayUserOptions(options);
+                string input = UserInterface.GetUserInput();
+                if (input.ToLower() == "9" || input.ToLower() == "finished")
+                {
+                    Query.EnterUpdate(animal, updates);
+                    collectingInfo = false;
+                }
+                else
+                {
+                    updates = UserInterface.EnterSearchCriteria(updates, input);
+                }
+            } while (collectingInfo);
+            
         }
 
         private void CheckAnimalStatus(int iD)

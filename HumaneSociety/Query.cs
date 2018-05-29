@@ -122,6 +122,7 @@ namespace HumaneSociety
                     category = new Catagory();
                     category.catagory1 = inputCategory;
                     db.Catagories.InsertOnSubmit(category);
+                    db.SubmitChanges();
                     category = db.Catagories.Where(c => c.catagory1 == inputCategory).FirstOrDefault();
                 }
                 return category;
@@ -267,15 +268,6 @@ namespace HumaneSociety
 
                 }
 
-                var animalResult = db.Animals.Where(a => a.ID == animal.ID).FirstOrDefault();
-                animalResult.Breed1 = animal.Breed1;
-                animalResult.name = animal.name;
-                animalResult.age = animal.age;
-                animalResult.demeanor = animal.demeanor;
-                animalResult.kidFriendly = animal.kidFriendly;
-                animalResult.petFriendly = animal.petFriendly;
-                animalResult.weight = animal.weight;
-
                 db.SubmitChanges();
             }
         }
@@ -394,7 +386,8 @@ namespace HumaneSociety
         {
             using (var db = new HumaneSocietyDataContext())
             {
-                return db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID);
+                var results = db.AnimalShotJunctions.Where(a => a.Animal_ID == animal.ID);
+                return results;
             }
         }
 
