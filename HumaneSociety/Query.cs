@@ -52,6 +52,17 @@ namespace HumaneSociety
             }
         }
 
+        public static void AddUsernamePassword(Employee employee)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var employeeResult = db.Employees.Where(e => e.ID == employee.ID).FirstOrDefault();
+                employeeResult.userName = employee.userName;
+                employeeResult.pass = employee.pass;
+                db.SubmitChanges();
+            }
+        }
+
         public static void Adopt(Animal animal, Client client)
         {
             var clientAnimalJunction = new ClientAnimalJunction();
