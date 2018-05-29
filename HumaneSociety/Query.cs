@@ -246,6 +246,16 @@ namespace HumaneSociety
             return queryMethod(employee);
         }
 
+        public static void UpdateAddress(Client client)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                Client clientResult = db.Clients.Where(c => c.ID == client.ID).First();
+                clientResult.UserAddress1 = client.UserAddress1;
+                db.SubmitChanges();
+            }
+        }
+
         public static void updateClient(Client client)
         {
             using (var db = new HumaneSocietyDataContext())
