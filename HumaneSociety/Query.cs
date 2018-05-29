@@ -90,7 +90,13 @@ namespace HumaneSociety
             
         //}
 
-
+        public static bool CheckEmployeeUserNameExist(string username)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                return db.Employees.Where(e => e.userName == username).FirstOrDefault() != null;
+            }
+        }
 
         private static Employee CreateEmployee(Employee employee)
         {
