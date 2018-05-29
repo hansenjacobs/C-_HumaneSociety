@@ -39,6 +39,19 @@ namespace HumaneSociety
             } 
         }
 
+        public static void AddNewShot(string name)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var shot = new Shot();
+                shot.name = name;
+
+                db.Shots.InsertOnSubmit(shot);
+
+                db.SubmitChanges();
+            }
+        }
+
         public static void Adopt(Animal animal, Client client)
         {
             var clientAnimalJunction = new ClientAnimalJunction();
@@ -361,6 +374,38 @@ namespace HumaneSociety
                 Client clientResult = db.Clients.Where(c => c.ID == client.ID).First();
                 clientResult.lastName = client.lastName;
                 db.SubmitChanges();
+            }
+        }
+
+        public static void UpdateShot(string type, Animal animal)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var shot = db.Shots.Where(s => s.name == type).FirstOrDefault();
+                if (shot == null)
+                {
+                    AddNewShot(type);
+                    shot = db.Shots.Where(s => s.name == type).FirstOrDefault();
+                }
+
+                var animalShotJunction = db.AnimalShotJunctions.Where(a => a.Animal.ID == animal.ID && a.Shot.ID == shot.ID).FirstOrDefault();
+                if(animalShotJunction == null)
+                {
+                    animalShotJunction = new AnimalShotJunction();
+                    animalShotJunction.Animal = animal;
+                    animalShotJunction.Shot = shot;
+                    animalShotJunction.dateRecieved = DateTime.Now;
+                    db.AnimalShotJunctions.InsertOnSubmit(animalShotJunction);
+                }
+                else
+                {
+                    animalShotJunction.dateRecieved = DateTime.Now;
+                }
+
+                db.SubmitChanges();
+                
+
+                
             }
         }
 
