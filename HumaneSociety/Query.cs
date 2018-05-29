@@ -137,6 +137,21 @@ namespace HumaneSociety
             }
         }
 
+        public static IQueryable<USState> GetStates()
+        {
+            try
+            {
+                using (var db = new HumaneSocietyDataContext())
+                {
+                    return db.USStates;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static IEnumerable<ClientAnimalJunction> GetUserAdoptionStatus(Client client)
         {
             try
