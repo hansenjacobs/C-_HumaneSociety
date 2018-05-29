@@ -304,6 +304,14 @@ namespace HumaneSociety
             }
         }
 
+        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                return db.Employees.Where(e => e.employeeNumber == employeeNumber && e.email == email).First();
+            }
+        }
+
         public static Employee RunEmployeeQueries(Employee employee, string queryType)
         {
             Func<Employee, Employee> queryMethod;
