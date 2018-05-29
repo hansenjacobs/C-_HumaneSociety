@@ -12,33 +12,48 @@ namespace HumaneSociety
 
         public static void AddAnimal(Animal animal)
         {
-            HumanSocietyDataContext MyTable = new HumanSocietyDataContext();
+            HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
             MyTable.Animals.InsertOnSubmit(animal);
             MyTable.SubmitChanges();
         }
+
+        public static void Adopt(Animal animal, Client client)
+        {
+            var clientAnimalJunction = new ClientAnimalJunction();
+            clientAnimalJunction.Animal1 = animal;
+            clientAnimalJunction.Client1 = client;
+            clientAnimalJunction.approvalStatus = "pending";
+
+            using (HumaneSocietyDataContext db = new HumaneSocietyDataContext())
+            {
+                db.ClientAnimalJunctions.InsertOnSubmit(clientAnimalJunction);
+                db.SubmitChanges();
+            }
+        }
+
         public static void RemoveAnimal(Animal animal)
         {
-            HumanSocietyDataContext MyTable = new HumanSocietyDataContext();
+            HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
             MyTable.Animals.DeleteOnSubmit(animal);
             MyTable.SubmitChanges();
         }
 
-        public static int BreedSearch(string inputBreed, HumanSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
+        public static int BreedSearch(string inputBreed, HumaneSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
         {
             var existingBreed = (from row in MyTable.Breeds where row.breed1 == inputBreed select row.ID).FirstOrDefault();
             return existingBreed;
         }
 
-        public static int GetBreed(string inputBreed)
-        {
-            HumanSocietyDataContext MyTable = new HumanSocietyDataContext();
-            int testBreed = BreedSearch(inputBreed, MyTable)
+        //public static int GetBreed(string inputBreed)
+        //{
+        //    HumanSocietyDataContext MyTable = new HumanSocietyDataContext();
+        //    int testBreed = BreedSearch(inputBreed, MyTable)
 
 
 
-            if BreedSearch() returns null, call AddBreed() and then return that breed ID;
+        //    if BreedSearch() returns null, call AddBreed() and then return that breed ID;
             
-        }
+        //}
 
 
 
@@ -110,7 +125,7 @@ namespace HumaneSociety
         {
             try
             {
-                using(HumanSocietyDataContext db = new HumanSocietyDataContext())
+                using(HumaneSocietyDataContext db = new HumaneSocietyDataContext())
                 {
                     var animalResult = db.Animals.Where(a => a.ID == iD).FirstOrDefault();
                     return animalResult;
