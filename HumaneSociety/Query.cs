@@ -118,6 +118,22 @@ namespace HumaneSociety
             }
         }
 
+        public static Animal GetAnimalByID(int iD)
+        {
+            try
+            {
+                using(HumaneSocietyDataContext db = new HumaneSocietyDataContext())
+                {
+                    var animalResult = db.Animals.Where(a => a.ID == iD).FirstOrDefault();
+                    return animalResult;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         private static Employee GetEmployee(Employee employee)
         {
             try
@@ -135,27 +151,19 @@ namespace HumaneSociety
                         UserInterface.DisplayUserOptions($"Unable to locate employee # {employee.employeeNumber}.");
                         return null;
                     }
-                }   
-            }
-            catch (Exception)
-            {
-                return null;
-            }   
-        }
-
-        public static Animal GetAnimalByID(int iD)
-        {
-            try
-            {
-                using(HumaneSocietyDataContext db = new HumaneSocietyDataContext())
-                {
-                    var animalResult = db.Animals.Where(a => a.ID == iD).FirstOrDefault();
-                    return animalResult;
                 }
             }
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public static IQueryable<ClientAnimalJunction> GetPendingAdoptions()
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                return db.ClientAnimalJunctions.Where(c => c.approvalStatus == "pending");
             }
         }
 
