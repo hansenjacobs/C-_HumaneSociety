@@ -244,9 +244,10 @@ namespace HumaneSociety
         {
             Console.Clear();
             Animal animal = new Animal();
+            string inputCategory = UserInterface.GetStringData("species", "the animal's");
             string inputBreed = UserInterface.GetStringData("breed", "the animal's");
             
-            animal.breed = Query.GetBreed(inputBreed);
+            animal.breed = Query.GetBreed(inputBreed, inputCategory);
             animal.name = UserInterface.GetStringData("name", "the animal's");
             animal.age = UserInterface.GetIntegerData("age", "the animal's");
             animal.demeanor = UserInterface.GetStringData("demeanor", "the animal's");

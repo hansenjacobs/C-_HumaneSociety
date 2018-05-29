@@ -84,21 +84,26 @@ namespace HumaneSociety
             MyTable.SubmitChanges();
         }
 
-        public static int? BreedSearch(string inputBreed, HumaneSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
+        public static int? BreedSearch(string inputBreed, string category, HumaneSocietyDataContext MyTable)    //have get breed call breed search within it once your donw wrtiing it 
         {
-            int? existingBreed = (from row in MyTable.Breeds where row.breed1 == inputBreed select row.ID).FirstOrDefault();
-            return existingBreed;
+            Breed existingBreed = (from row in MyTable.Breeds where row.breed1 == inputBreed && row.Catagory1.catagory1 == category select row).FirstOrDefault();
+            if(existingBreed != null)
+            {
+                return existingBreed.ID;
+            }
+            return null;
         }
 
-        public static int GetBreed(string inputBreed)
+        public static int GetBreed(string inputBreed, string inputCategory)
         {
             HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
             int existingBreed;
-            int? testBreed = BreedSearch(inputBreed, MyTable);
+            int? testBreed = BreedSearch(inputBreed, inputCategory, MyTable);
             if (testBreed == null)
             {
-                AddBreed(inputBreed);
-                existingBreed = (int)testBreed;
+                var category = GetCategory(inputCategory);
+                AddBreed(inputBreed, category);
+                existingBreed = (int)BreedSearch(inputBreed, inputCategory, MyTable);
                 return existingBreed;
             }
             else {
@@ -107,11 +112,28 @@ namespace HumaneSociety
             }
         }
 
-        public static void AddBreed(string inputBreed)
+        public static Catagory GetCategory(string inputCategory)
+        {
+            using (var db = new HumaneSocietyDataContext())
+            {
+                var category = db.Catagories.Where(c => c.catagory1 == inputCategory).FirstOrDefault();
+                if(category == null)
+                {
+                    category = new Catagory();
+                    category.catagory1 = inputCategory;
+                    db.Catagories.InsertOnSubmit(category);
+                    category = db.Catagories.Where(c => c.catagory1 == inputCategory).FirstOrDefault();
+                }
+                return category;
+            }
+        }
+
+        public static void AddBreed(string inputBreed, Catagory category)
         {
             HumaneSocietyDataContext MyTable = new HumaneSocietyDataContext();
             var newBreed = new Breed();
             newBreed.breed1 = inputBreed;
+            newBreed.Catagory1 = category;
             MyTable.Breeds.InsertOnSubmit(newBreed);
             MyTable.SubmitChanges();
         }
