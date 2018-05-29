@@ -153,6 +153,21 @@ namespace HumaneSociety
             }
         }
 
+        public static IQueryable<Client> RetrieveClients()
+        {
+            try
+            {
+                using (var db = new HumaneSocietyDataContext())
+                {
+                    return db.Clients;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static Employee RunEmployeeQueries(Employee employee, string queryType)
         {
             Func<Employee, Employee> queryMethod;
