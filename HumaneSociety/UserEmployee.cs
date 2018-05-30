@@ -26,7 +26,7 @@ namespace HumaneSociety
         }
         protected override void RunUserMenus()
         {
-            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption" };
+            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption", "5. Accept Payment on Adoption" };
             UserInterface.DisplayUserOptions(options);
             string input = UserInterface.GetUserInput();
             RunUserInput(input);
@@ -48,7 +48,11 @@ namespace HumaneSociety
                     RunUserMenus();
                     return;
                 case "4":
-                    CheckAdoptions();
+                    CheckPendingAdoptions();
+                    RunUserMenus();
+                    return;
+                case "5":
+                    CheckApprovedAdoptions();
                     RunUserMenus();
                     return;
                 default:
@@ -58,7 +62,28 @@ namespace HumaneSociety
             }
         }
 
-        private void CheckAdoptions()
+        private void CheckApprovedAdoptions()
+        {
+            Console.Clear();
+            List<string> adoptionInfo = new List<string>();
+            int counter = 1;
+            var adoptions = Query.GetApprovedAdoptions().ToList();
+            if (adoptions.Count > 0)
+            {
+                foreach (ClientAnimalJunction data in adoptions)
+                {
+                    adoptionInfo.Add($"{counter}. {data.Client1.firstName} {data.Client1.lastName}, {data.Animal1.name} {data.Animal1.Breed1.breed1}");
+                    counter++;
+                }
+                UserInterface.DisplayUserOptions(adoptionInfo);
+                UserInterface.DisplayUserOptions("Enter the number of the adoption you would like to complete");
+                int input = UserInterface.GetIntegerData();
+                CompleteAdoption(adoptions[input - 1]);
+            }
+
+        }
+
+        private void CheckPendingAdoptions()
         {
             Console.Clear();
             List<string> adoptionInfo = new List<string>();
@@ -79,6 +104,19 @@ namespace HumaneSociety
 
         }
 
+        private void CompleteAdoption(ClientAnimalJunction clientAnimalJunction)
+        {
+            UserInterface.DisplayAnimalInfo(clientAnimalJunction.Animal1);
+            UserInterface.DisplayClientInfo(clientAnimalJunction.Client1);
+            UserInterface.DisplayUserOptions("How much have your received for this adoption?");
+            Query.UpdateAdoptionFeesPaid(clientAnimalJunction, UserInterface.GetIntegerData());
+            UserInterface.DisplayUserOptions("Would you like to update the adoption status to 'ADOPTED'?");
+            if ((bool)UserInterface.GetBitData())
+            {
+                Query.UpdateAdoptionStatus("adopted", clientAnimalJunction);
+            }
+        }
+
         private void ApproveAdoption(ClientAnimalJunction clientAnimalJunction)
         {
             UserInterface.DisplayAnimalInfo(clientAnimalJunction.Animal1);
@@ -86,11 +124,11 @@ namespace HumaneSociety
             UserInterface.DisplayUserOptions("Would you approve this adoption?");
             if ((bool)UserInterface.GetBitData())
             {
-                Query.UpdateAdoption(true, clientAnimalJunction);
+                Query.UpdateAdoptionStatus("approved", clientAnimalJunction);
             }
             else
             {
-                Query.UpdateAdoption(false, clientAnimalJunction);
+                Query.UpdateAdoptionStatus("denied", clientAnimalJunction);
             }
         }
 
@@ -120,7 +158,7 @@ namespace HumaneSociety
             bool isFinished = false;
             Console.Clear();
             while(!isFinished){
-                List<string> options = new List<string>() { "Animal found:", animal.name, animal.Breed1.Catagory1.catagory1, animal.Breed1.breed1, animal.Breed1.pattern, "Would you like to:", "1. Get Info", "2. Update Info", "3. Check shots", "4. Return" };
+                List<string> options = new List<string>() { "Animal found:", animal.name, animal.Breed1.Catagory1.catagory1, animal.Breed1.breed1, animal.Breed1.pattern, "Status: " + Query.GetAnimalAdoptionStatus(animal), "Would you like to:", "1. Get Info", "2. Update Info", "3. Check shots", "4. Return" };
                 UserInterface.DisplayUserOptions(options);
                 int input = UserInterface.GetIntegerData();
                 if (input == 4)

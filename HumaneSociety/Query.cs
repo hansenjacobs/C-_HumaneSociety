@@ -286,6 +286,47 @@ namespace HumaneSociety
             }
         }
 
+        public static string GetAnimalAdoptionStatus(Animal animal)
+        {
+            var db = new HumaneSocietyDataContext();
+            string output = "";
+            var results = db.ClientAnimalJunctions.Where(c => c.animal == animal.ID && c.approvalStatus != "denied");
+            foreach(ClientAnimalJunction result in results)
+            {
+                switch (result.approvalStatus.ToLower())
+                {
+                    case "adopted":
+                        output = "ADOPTED";
+                        break;
+                    case "approved":
+                        if(output != "ADOPTED")
+                        {
+                            output = "APPROVED";
+                        }
+                        break;
+                    case "pending":
+                        if(output != "ADOPTED" && output != "APPROVED")
+                        {
+                            output = "PENDING";
+                        }
+                        break;
+                    case null:
+                        if(output != "PENDING" && output != "APPROVED" && output != "ADOPTED")
+                        {
+                            output = "AVAILABLE";
+                        }
+                        break;
+                    default:
+                        if(output == "")
+                        {
+                            output = "UNKNOWN";
+                        }
+                        break;
+                }
+            }
+            return output == "" ? "AVAILABLE" : output;
+        }
+
         public static Animal GetAnimalByID(int iD)
         {
             try
@@ -298,6 +339,12 @@ namespace HumaneSociety
             {
                 return null;
             }
+        }
+
+        public static IEnumerable<ClientAnimalJunction> GetApprovedAdoptions()
+        {
+            var db = new HumaneSocietyDataContext();
+            return db.ClientAnimalJunctions.Where(c => c.approvalStatus == "approved");
         }
 
         public static int GetDiet()
@@ -467,11 +514,26 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        public static void UpdateAdoption (bool decision, ClientAnimalJunction clientAnimalJunction)
+        public static void UpdateAdoptionFeesPaid(ClientAnimalJunction adoption, int feesPaid)
+        {
+            var db = new HumaneSocietyDataContext();
+            var adoptionResults = db.ClientAnimalJunctions.Where(c => c.client == adoption.client && c.animal == c.animal).First();
+            if(adoptionResults.feePaid == null)
+            {
+                adoptionResults.feePaid = feesPaid;
+            }
+            else
+            {
+                adoptionResults.feePaid += feesPaid;
+            }
+            db.SubmitChanges();
+        }
+
+        public static void UpdateAdoptionStatus(string status, ClientAnimalJunction clientAnimalJunction)
         {
             var db = new HumaneSocietyDataContext();
             var clientAnimalJunctionResult = db.ClientAnimalJunctions.Where(c => c.Client1.ID == clientAnimalJunction.Client1.ID && c.Animal1.ID == clientAnimalJunction.Animal1.ID).FirstOrDefault();
-            clientAnimalJunctionResult.approvalStatus = decision ? "approved" : "denied";
+            clientAnimalJunctionResult.approvalStatus = status;
             db.SubmitChanges();
         }
 

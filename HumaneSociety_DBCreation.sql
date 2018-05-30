@@ -86,3 +86,4 @@ ALTER TABLE Clients ADD income INTEGER;
 ALTER TABLE Clients ADD kids INTEGER; 
 ALTER TABLE Clients ADD homeSize INTEGER;
 ALTER TABLE ClientAnimalJunctions ADD approvalStatus VARCHAR(50);
+ALTER TABLE ClientAnimalJunctions ADD feePaid MONEY;

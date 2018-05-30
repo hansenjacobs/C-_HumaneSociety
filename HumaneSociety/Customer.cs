@@ -85,6 +85,7 @@ namespace HumaneSociety
             if (pendingAdoptions.Count == 0)
             {
                 UserInterface.DisplayUserOptions("No adoptions currently pending");
+                Console.ReadLine();
             }
             else
             {

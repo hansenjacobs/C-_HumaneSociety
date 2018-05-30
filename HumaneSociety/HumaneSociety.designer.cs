@@ -42,9 +42,6 @@ namespace HumaneSociety
     partial void InsertCatagory(Catagory instance);
     partial void UpdateCatagory(Catagory instance);
     partial void DeleteCatagory(Catagory instance);
-    partial void InsertClientAnimalJunction(ClientAnimalJunction instance);
-    partial void UpdateClientAnimalJunction(ClientAnimalJunction instance);
-    partial void DeleteClientAnimalJunction(ClientAnimalJunction instance);
     partial void InsertClient(Client instance);
     partial void UpdateClient(Client instance);
     partial void DeleteClient(Client instance);
@@ -66,6 +63,9 @@ namespace HumaneSociety
     partial void InsertUSState(USState instance);
     partial void UpdateUSState(USState instance);
     partial void DeleteUSState(USState instance);
+    partial void InsertClientAnimalJunction(ClientAnimalJunction instance);
+    partial void UpdateClientAnimalJunction(ClientAnimalJunction instance);
+    partial void DeleteClientAnimalJunction(ClientAnimalJunction instance);
     #endregion
 		
 		public HumaneSocietyDataContext() : 
@@ -130,14 +130,6 @@ namespace HumaneSociety
 			}
 		}
 		
-		public System.Data.Linq.Table<ClientAnimalJunction> ClientAnimalJunctions
-		{
-			get
-			{
-				return this.GetTable<ClientAnimalJunction>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Client> Clients
 		{
 			get
@@ -191,6 +183,14 @@ namespace HumaneSociety
 			get
 			{
 				return this.GetTable<USState>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ClientAnimalJunction> ClientAnimalJunctions
+		{
+			get
+			{
+				return this.GetTable<ClientAnimalJunction>();
 			}
 		}
 	}
@@ -1271,198 +1271,6 @@ namespace HumaneSociety
 		{
 			this.SendPropertyChanging();
 			entity.Catagory1 = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClientAnimalJunctions")]
-	public partial class ClientAnimalJunction : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _client;
-		
-		private int _animal;
-		
-		private string _approvalStatus;
-		
-		private EntityRef<Animal> _Animal1;
-		
-		private EntityRef<Client> _Client1;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnclientChanging(int value);
-    partial void OnclientChanged();
-    partial void OnanimalChanging(int value);
-    partial void OnanimalChanged();
-    partial void OnapprovalStatusChanging(string value);
-    partial void OnapprovalStatusChanged();
-    #endregion
-		
-		public ClientAnimalJunction()
-		{
-			this._Animal1 = default(EntityRef<Animal>);
-			this._Client1 = default(EntityRef<Client>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_client", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int client
-		{
-			get
-			{
-				return this._client;
-			}
-			set
-			{
-				if ((this._client != value))
-				{
-					if (this._Client1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnclientChanging(value);
-					this.SendPropertyChanging();
-					this._client = value;
-					this.SendPropertyChanged("client");
-					this.OnclientChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_animal", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int animal
-		{
-			get
-			{
-				return this._animal;
-			}
-			set
-			{
-				if ((this._animal != value))
-				{
-					if (this._Animal1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnanimalChanging(value);
-					this.SendPropertyChanging();
-					this._animal = value;
-					this.SendPropertyChanged("animal");
-					this.OnanimalChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approvalStatus", DbType="VarChar(50)")]
-		public string approvalStatus
-		{
-			get
-			{
-				return this._approvalStatus;
-			}
-			set
-			{
-				if ((this._approvalStatus != value))
-				{
-					this.OnapprovalStatusChanging(value);
-					this.SendPropertyChanging();
-					this._approvalStatus = value;
-					this.SendPropertyChanged("approvalStatus");
-					this.OnapprovalStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Animal_ClientAnimalJunction", Storage="_Animal1", ThisKey="animal", OtherKey="ID", IsForeignKey=true)]
-		public Animal Animal1
-		{
-			get
-			{
-				return this._Animal1.Entity;
-			}
-			set
-			{
-				Animal previousValue = this._Animal1.Entity;
-				if (((previousValue != value) 
-							|| (this._Animal1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Animal1.Entity = null;
-						previousValue.ClientAnimalJunctions.Remove(this);
-					}
-					this._Animal1.Entity = value;
-					if ((value != null))
-					{
-						value.ClientAnimalJunctions.Add(this);
-						this._animal = value.ID;
-					}
-					else
-					{
-						this._animal = default(int);
-					}
-					this.SendPropertyChanged("Animal1");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Client_ClientAnimalJunction", Storage="_Client1", ThisKey="client", OtherKey="ID", IsForeignKey=true)]
-		public Client Client1
-		{
-			get
-			{
-				return this._Client1.Entity;
-			}
-			set
-			{
-				Client previousValue = this._Client1.Entity;
-				if (((previousValue != value) 
-							|| (this._Client1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Client1.Entity = null;
-						previousValue.ClientAnimalJunctions.Remove(this);
-					}
-					this._Client1.Entity = value;
-					if ((value != null))
-					{
-						value.ClientAnimalJunctions.Add(this);
-						this._client = value.ID;
-					}
-					else
-					{
-						this._client = default(int);
-					}
-					this.SendPropertyChanged("Client1");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 	
@@ -2799,6 +2607,222 @@ namespace HumaneSociety
 		{
 			this.SendPropertyChanging();
 			entity.USState = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClientAnimalJunctions")]
+	public partial class ClientAnimalJunction : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _client;
+		
+		private int _animal;
+		
+		private string _approvalStatus;
+		
+		private System.Nullable<decimal> _feePaid;
+		
+		private EntityRef<Animal> _Animal1;
+		
+		private EntityRef<Client> _Client1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnclientChanging(int value);
+    partial void OnclientChanged();
+    partial void OnanimalChanging(int value);
+    partial void OnanimalChanged();
+    partial void OnapprovalStatusChanging(string value);
+    partial void OnapprovalStatusChanged();
+    partial void OnfeePaidChanging(System.Nullable<decimal> value);
+    partial void OnfeePaidChanged();
+    #endregion
+		
+		public ClientAnimalJunction()
+		{
+			this._Animal1 = default(EntityRef<Animal>);
+			this._Client1 = default(EntityRef<Client>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_client", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int client
+		{
+			get
+			{
+				return this._client;
+			}
+			set
+			{
+				if ((this._client != value))
+				{
+					if (this._Client1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnclientChanging(value);
+					this.SendPropertyChanging();
+					this._client = value;
+					this.SendPropertyChanged("client");
+					this.OnclientChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_animal", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int animal
+		{
+			get
+			{
+				return this._animal;
+			}
+			set
+			{
+				if ((this._animal != value))
+				{
+					if (this._Animal1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnanimalChanging(value);
+					this.SendPropertyChanging();
+					this._animal = value;
+					this.SendPropertyChanged("animal");
+					this.OnanimalChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_approvalStatus", DbType="VarChar(50)")]
+		public string approvalStatus
+		{
+			get
+			{
+				return this._approvalStatus;
+			}
+			set
+			{
+				if ((this._approvalStatus != value))
+				{
+					this.OnapprovalStatusChanging(value);
+					this.SendPropertyChanging();
+					this._approvalStatus = value;
+					this.SendPropertyChanged("approvalStatus");
+					this.OnapprovalStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_feePaid", DbType="Money")]
+		public System.Nullable<decimal> feePaid
+		{
+			get
+			{
+				return this._feePaid;
+			}
+			set
+			{
+				if ((this._feePaid != value))
+				{
+					this.OnfeePaidChanging(value);
+					this.SendPropertyChanging();
+					this._feePaid = value;
+					this.SendPropertyChanged("feePaid");
+					this.OnfeePaidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Animal_ClientAnimalJunction", Storage="_Animal1", ThisKey="animal", OtherKey="ID", IsForeignKey=true)]
+		public Animal Animal1
+		{
+			get
+			{
+				return this._Animal1.Entity;
+			}
+			set
+			{
+				Animal previousValue = this._Animal1.Entity;
+				if (((previousValue != value) 
+							|| (this._Animal1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Animal1.Entity = null;
+						previousValue.ClientAnimalJunctions.Remove(this);
+					}
+					this._Animal1.Entity = value;
+					if ((value != null))
+					{
+						value.ClientAnimalJunctions.Add(this);
+						this._animal = value.ID;
+					}
+					else
+					{
+						this._animal = default(int);
+					}
+					this.SendPropertyChanged("Animal1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Client_ClientAnimalJunction", Storage="_Client1", ThisKey="client", OtherKey="ID", IsForeignKey=true)]
+		public Client Client1
+		{
+			get
+			{
+				return this._Client1.Entity;
+			}
+			set
+			{
+				Client previousValue = this._Client1.Entity;
+				if (((previousValue != value) 
+							|| (this._Client1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Client1.Entity = null;
+						previousValue.ClientAnimalJunctions.Remove(this);
+					}
+					this._Client1.Entity = value;
+					if ((value != null))
+					{
+						value.ClientAnimalJunctions.Add(this);
+						this._client = value.ID;
+					}
+					else
+					{
+						this._client = default(int);
+					}
+					this.SendPropertyChanged("Client1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

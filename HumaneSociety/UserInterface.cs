@@ -138,7 +138,7 @@ namespace HumaneSociety
 
         public static void DisplayAnimalInfo(Animal animal)
         {
-            List<string> info = new List<string>() {"ID: " + animal.ID, animal.name, animal.age + "years old", "Demeanour: " + animal.demeanor, "Kid friendly: " + BoolToYesNo(animal.kidFriendly), "pet friendly: " + BoolToYesNo(animal.petFriendly), $"Location: {animal.Room.name} in {animal.Room.building}", "Weight: " + animal.weight.ToString(),  "Food amoumnt:" + animal.DietPlan.amount};
+            List<string> info = new List<string>() {"ID: " + animal.ID, animal.name, animal.age + " years old", "Status: " + Query.GetAnimalAdoptionStatus(animal), "Demeanour: " + animal.demeanor, "Kid friendly: " + BoolToYesNo(animal.kidFriendly), "pet friendly: " + BoolToYesNo(animal.petFriendly), $"Location: {animal.Room.name} in {animal.Room.building}", "Weight: " + animal.weight.ToString(),  "Food amoumnt:" + animal.DietPlan.amount};
             DisplayUserOptions(info);
             Console.ReadLine();
 

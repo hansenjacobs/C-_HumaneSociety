@@ -49,15 +49,6 @@
       <Association Name="Catagory_Breed" Member="Breeds" ThisKey="ID" OtherKey="catagory" Type="Breed" />
     </Type>
   </Table>
-  <Table Name="dbo.ClientAnimalJunctions" Member="ClientAnimalJunctions">
-    <Type Name="ClientAnimalJunction">
-      <Column Name="client" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="animal" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="approvalStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
-      <Association Name="Animal_ClientAnimalJunction" Member="Animal1" ThisKey="animal" OtherKey="ID" Type="Animal" IsForeignKey="true" />
-      <Association Name="Client_ClientAnimalJunction" Member="Client1" ThisKey="client" OtherKey="ID" Type="Client" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Clients" Member="Clients">
     <Type Name="Client">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -126,6 +117,16 @@
       <Column Name="name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="abbrev" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Association Name="USState_UserAddress" Member="UserAddresses" ThisKey="ID" OtherKey="USStates" Type="UserAddress" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClientAnimalJunctions" Member="ClientAnimalJunctions">
+    <Type Name="ClientAnimalJunction">
+      <Column Name="client" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="animal" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="approvalStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="feePaid" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Association Name="Animal_ClientAnimalJunction" Member="Animal1" ThisKey="animal" OtherKey="ID" Type="Animal" IsForeignKey="true" />
+      <Association Name="Client_ClientAnimalJunction" Member="Client1" ThisKey="client" OtherKey="ID" Type="Client" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
