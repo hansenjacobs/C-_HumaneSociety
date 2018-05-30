@@ -26,7 +26,7 @@ namespace HumaneSociety
         }
         protected override void RunUserMenus()
         {
-            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption", "5. Accept Payment on Adoption" };
+            List<string> options = new List<string>() { "What would you like to do? (select number of choice)", "1. Add animal", "2. Remove Anmial", "3. Check Animal Status",  "4. Approve Adoption", "5. Accept Payment on Adoption", "6. Import Animals from CSV file" };
             UserInterface.DisplayUserOptions(options);
             string input = UserInterface.GetUserInput();
             RunUserInput(input);
@@ -55,6 +55,10 @@ namespace HumaneSociety
                     CheckApprovedAdoptions();
                     RunUserMenus();
                     return;
+                case "6":
+                    UserInterface.DisplayUserOptions("Please enter the file path of the CSV file to import.");
+                    Query.ImportAnimalsCSV(UserInterface.GetFilePath());
+                    break;
                 default:
                     UserInterface.DisplayUserOptions("Input not accepted please try again");
                     RunUserMenus();

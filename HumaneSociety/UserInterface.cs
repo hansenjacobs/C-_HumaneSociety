@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace HumaneSociety
 {
@@ -169,6 +170,18 @@ namespace HumaneSociety
                 return false;
             }
         }
+
+        public static string GetFilePath()
+        {
+            string input = "";
+            do
+            {
+                input = Console.ReadLine();
+
+            } while (!File.Exists(input));
+            return input;
+        }
+
         public static Dictionary<int, string> EnterSearchCriteria(Dictionary<int, string> searchParameters, string input)
         {
             Console.Clear();

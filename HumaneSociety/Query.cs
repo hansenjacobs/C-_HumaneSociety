@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace HumaneSociety
 {
@@ -464,6 +465,94 @@ namespace HumaneSociety
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public static void ImportAnimalsCSV (string filePath)
+        {
+
+            string[] allLines = File.ReadAllLines(filePath);
+
+            var query = from line in allLines
+                        let data = line.Split(',')
+                        select new
+                        {
+                            ID = data[0],
+                            Name = data[1],
+                            Breed = data[2],
+                            Weight = data[3],
+                            Age = data[4],
+                            Diet = data[5],
+                            Location = data[6],
+                            Demeanor = data[7],
+                            KidFriendly = data[8],
+                            PetFirendly = data[9],
+                            Gender = data[10],
+                            AdoptionStatus = data[11]
+                        };
+
+            var db = new HumaneSocietyDataContext();
+
+            foreach (var a in query)
+            {
+                var animal = new Animal();
+                animal.ID = int.Parse(a.ID);
+                animal.name = a.Name;
+                animal.breed = null;
+                animal.weight = int.Parse(a.Weight);
+                animal.age = int.Parse(a.Age);
+                animal.diet = null;
+                animal.location = null;
+                animal.demeanor = a.Demeanor;
+
+                bool? kidFriendly;
+                switch (a.KidFriendly)
+                {
+                    case "0":
+                        kidFriendly = false;
+                        break;
+                    case "1":
+                        kidFriendly = true;
+                        break;
+                    default:
+                        kidFriendly = null;
+                        break;
+                }
+                animal.kidFriendly = kidFriendly;
+
+                bool? petFriendly;
+                switch (a.PetFirendly)
+                {
+                    case "0":
+                        petFriendly = false;
+                        break;
+                    case "1":
+                        petFriendly = true;
+                        break;
+                    default:
+                        petFriendly = null;
+                        break;
+                }
+                animal.petFriendly = petFriendly;
+
+                bool? gender;
+                switch (a.PetFirendly)
+                {
+                    case "0":
+                        gender = false;
+                        break;
+                    case "1":
+                        gender = true;
+                        break;
+                    default:
+                        gender = null;
+                        break;
+                }
+                animal.gender = gender;
+                animal.adoptionStatus = a.AdoptionStatus;
+
+                db.Animals.InsertOnSubmit(animal);
+                db.SubmitChanges();
             }
         }
 
