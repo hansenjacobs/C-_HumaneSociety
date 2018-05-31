@@ -58,7 +58,8 @@ namespace HumaneSociety
                 case "6":
                     UserInterface.DisplayUserOptions("Please enter the file path of the CSV file to import.");
                     Query.ImportAnimalsCSV(UserInterface.GetFilePath());
-                    break;
+                    RunUserMenus();
+                    return;
                 default:
                     UserInterface.DisplayUserOptions("Input not accepted please try again");
                     RunUserMenus();

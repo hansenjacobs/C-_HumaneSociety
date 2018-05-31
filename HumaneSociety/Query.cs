@@ -477,18 +477,17 @@ namespace HumaneSociety
                         let data = line.Split(',')
                         select new
                         {
-                            ID = data[0],
-                            Name = data[1],
-                            Breed = data[2],
-                            Weight = data[3],
-                            Age = data[4],
-                            Diet = data[5],
-                            Location = data[6],
-                            Demeanor = data[7],
-                            KidFriendly = data[8],
-                            PetFirendly = data[9],
-                            Gender = data[10],
-                            AdoptionStatus = data[11]
+                            Name = data[1].Trim(),
+                            Breed = data[2].Trim(),
+                            Weight = data[3].Trim(),
+                            Age = data[4].Trim(),
+                            Diet = data[5].Trim(),
+                            Location = data[6].Trim(),
+                            Demeanor = data[7].Trim(),
+                            KidFriendly = data[8].Trim(),
+                            PetFirendly = data[9].Trim(),
+                            Gender = data[10].Trim(),
+                            AdoptionStatus = data[11].Trim()
                         };
 
             var db = new HumaneSocietyDataContext();
@@ -496,14 +495,31 @@ namespace HumaneSociety
             foreach (var a in query)
             {
                 var animal = new Animal();
-                animal.ID = int.Parse(a.ID);
-                animal.name = a.Name;
+                // animal.ID is assigned by DB when inserting
+
+                if(a.Name.Substring(0,1)=="\"" && a.Name.Substring(a.Name.Length - 1) == "\"")
+                {
+                    animal.name = a.Name.Substring(1, a.Name.Length - 2);
+                }
+                else
+                {
+                    animal.name = a.Name;
+                }
+                
                 animal.breed = null;
                 animal.weight = int.Parse(a.Weight);
                 animal.age = int.Parse(a.Age);
                 animal.diet = null;
                 animal.location = null;
-                animal.demeanor = a.Demeanor;
+
+                if (a.Demeanor.Substring(0, 1) == "\"" && a.Demeanor.Substring(a.Demeanor.Length - 1) == "\"")
+                {
+                    animal.demeanor = a.Demeanor.Substring(1, a.Demeanor.Length - 2);
+                }
+                else
+                {
+                    animal.demeanor = a.Demeanor;
+                }
 
                 bool? kidFriendly;
                 switch (a.KidFriendly)
@@ -549,7 +565,15 @@ namespace HumaneSociety
                         break;
                 }
                 animal.gender = gender;
-                animal.adoptionStatus = a.AdoptionStatus;
+
+                if (a.AdoptionStatus.Substring(0, 1) == "\"" && a.AdoptionStatus.Substring(a.AdoptionStatus.Length - 1) == "\"")
+                {
+                    animal.adoptionStatus = a.AdoptionStatus.Substring(1, a.AdoptionStatus.Length - 2);
+                }
+                else
+                {
+                    animal.adoptionStatus = a.AdoptionStatus;
+                }
 
                 db.Animals.InsertOnSubmit(animal);
                 db.SubmitChanges();
